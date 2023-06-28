@@ -190,6 +190,37 @@ class Waitlist{
 
         }
 
+        void insertPersonAfter(Person* person, string name){
+            if(head == nullptr){
+                cout << "Insert failed. There is no one on the list." << endl;
+                return;
+            }
+            if(findPerson(person->name) != nullptr){
+                cout << "Person already on waitlist. Please enter a different or similar name." << endl;
+                return;
+            }
+            if(findPerson(name) == nullptr){
+                cout << "There is no one on the waitlist with that name." << endl;
+                return;
+            }
+            Person* ptr = findPerson(name);
+            Person* nextPtr = ptr->next;
+
+            if(nextPtr == nullptr){
+                ptr->next = person;
+                person->prev = ptr;
+            }
+            else{
+                ptr->next = person;
+                nextPtr->prev = person;
+                person->next = nextPtr;
+                person->prev = ptr;
+            }
+
+            cout << "Person inserted into waitlist." << endl;
+            
+        }
+
         void moveToBottom(string name){
             if(head == nullptr){
                 cout << "There is no one on the waitlist." << endl;
@@ -306,13 +337,14 @@ int main(){
         cout << "Welcome to the waitlist. Please choose one of the following options:" << endl << "---" << endl;
         cout << "1 - Add new person to waitlist" << endl;
         cout << "2 - Add new person to the front of the list" << endl;
-        cout << "3 - Move person forward" << endl;
-        cout << "4 - Move person backward" << endl;
-        cout << "5 - Move person to the front of the list" << endl;
-        cout << "6 - Move person to the bottom of the list" << endl;
-        cout << "7 - Swap two people" << endl;
-        cout << "8 - Remove person from waitlist" << endl;
-        cout << "9 - Clear Screen" << endl;
+        cout << "3 - Insert a new person to the list" << endl;
+        cout << "4 - Move person forward" << endl;
+        cout << "5 - Move person backward" << endl;
+        cout << "6 - Move person to the front of the list" << endl;
+        cout << "7 - Move person to the bottom of the list" << endl;
+        cout << "8 - Swap two people" << endl;
+        cout << "9 - Remove person from waitlist" << endl;
+        cout << "10 - Clear Screen" << endl;
 
         cin >> option;
         cin.ignore();
@@ -334,41 +366,49 @@ int main(){
                 w.prependPerson(person);
                 break;
             case 3:
+                cout << "Enter the person's name you want to add:" << endl;
+                getline(cin, name);
+                person->name = name;
+                cout << "Enter the name of person on the list you want to add new person after:" << endl;
+                getline(cin, name1);
+                w.insertPersonAfter(person, name1);
+                break;
+            case 4:
                 cout << "What is the person's name?" << endl;
                 getline(cin, name);
                 cout << "How many places do you want to move up?" << endl;
                 cin >> num;
                 w.adjustPlaceForward(name, num);
                 break;
-            case 4:
+            case 5:
                 cout << "What is the person's name?" << endl;
                 getline(cin, name);
                 cout << "How many places do you want to move down?" << endl;
                 cin >> num;
                 w.adjustPlaceBackwards(name, num);
                 break;
-            case 5:
+            case 6:
                 cout << "Who do you want to move to the top of the list?" << endl;
                 getline(cin, name);
                 w.prependExistingPerson(name);
                 break;
-            case 6:
+            case 7:
                 cout << "Who do you want to move to the bottom of the list?" << endl;
                 getline(cin, name);
                 w.moveToBottom(name);
                 break;
-            case 7:
+            case 8:
                 cout << "Which two people would you like to swap?" << endl;
                 getline(cin, name);
                 getline(cin, name1);
                 w.swapPlaces(name, name1);
                 break;
-            case 8:
+            case 9:
                 cout << "Which person would you like to remove from the waitlist?" << endl;
                 getline(cin, name);
                 w.deletePerson(name);
                 break;
-            case 9:
+            case 10:
                 system("cls");
                 break;
             default:
